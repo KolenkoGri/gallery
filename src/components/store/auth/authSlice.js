@@ -1,25 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getToken} from '../../../api/token';
+import {authRequestAsync} from './authAsync';
 
 const initialState = {
-  auth: false,
+  user: {},
   error: '',
+  status: '',
 };
 
-export const authSlice = createSlice({
-  name: 'auth',
+const authSlice = createSlice({
+  name: 'userData',
   initialState,
-  reducers: {
-    changeAuth(state, action) {
-      const token = getToken();
-      console.log(action);
-      if (token) {
-        state.auth = true;
-      }
+  extraReducers: {
+    [authRequestAsync.pending.type]: (state) => {
+      state.error = '';
+      state.status = 'loading';
+      state.user = [];
+    },
+    [authRequestAsync.fulfilled.type]: (state, action) => {
+      console.log(action, 'actions-fulfilled');
+      state.user = action.payload?.data;
+      state.error = '';
+      state.status = 'loaded';
+    },
+    [authRequestAsync.rejected.type]: (state, action) => {
+      state.error = action.payload.error;
+      state.status = 'error';
     }
   }
 });
-
-export const {changeAuth} = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,8 +1,5 @@
-import style from './Main.module.css';
+// import style from './Main.module.css';
 
-export const Main = () => {
-  console.log(style);
-  return (
-    <div></div>
-  );
-};
+export const Main = () => (
+  <div></div>
+);
