@@ -37,7 +37,7 @@
 }
 
 :root {
-  --black: #333333;
+  --black: #000000;
   --orange: #cc6633;
   --blue: #285784;
   --green: #5bb12c;
@@ -49,6 +49,7 @@
   --greyBF: hsl(0, 0%, 75%);
   --grey99: hsl(0, 0%, 60%);
   --grey66: hsl(0, 0%, 40%);
+  --grey33: hsl(0, 0%, 20%);
 }
 
 html {
@@ -68,11 +69,12 @@ body {
   font-family: Merriweather Sans, sans-serif;
   font-size: 16px;
   font-weight: 400;
-  background-color: var(--grayF5);
-  color: var(--black);
+  background-color: var(--black);
+  color: var(--greyBF);
 }
 
-img {
+img,
+svg {
   max-width: 100%;
   height: auto;
 }

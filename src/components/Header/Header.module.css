@@ -7,9 +7,10 @@
     padding-bottom: 15px;
     background-color: #c0f0f0;
     z-index: 10;
-}
-
-.block {
+  }
+  
+  .gridContainer {
     display: flex;
     justify-content: space-between;
-}
+  }
+  

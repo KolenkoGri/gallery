@@ -1,6 +1,13 @@
-// import style from './Logo.module.css';
-import {ReactComponent as IconLogo} from './img/logoImg.svg';
+import style from './Logo.module.css';
+import {SVG} from '../../../UI/SVG/SVG';
 
-export const Logo = () => (
-  <IconLogo/>
-);
+export const Logo = () =>
+  (
+    <a className={style.link} href='/'>
+      <SVG
+        iconName='logoIcon'
+        className={style.logo}
+        alt='Логотип'>
+      </SVG>
+    </a>
+  );

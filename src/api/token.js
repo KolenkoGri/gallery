@@ -1,25 +1,51 @@
-import {ACCESS_KEY, REDIRECT_URI, SECRET_KEY} from './const';
 import axios from 'axios';
+import {
+  API_URL_TOKEN,
+  ACCESS_KEY,
+  REDIRECT_URI,
+  SECRET_KEY,
+  GRANT_TYPE
+} from './const';
+import {deleteToken, updateToken} from '../store/tokenReducer';
+import {useDispatch} from 'react-redux';
 
-const params = new URLSearchParams(location.search);
-export const code = params.get('code');
+const createTokenUrl = (code) => {
+  const searchParams = new URLSearchParams();
 
+  searchParams.append('client_id', ACCESS_KEY);
+  searchParams.append('client_secret', SECRET_KEY);
+  searchParams.append('redirect_uri', REDIRECT_URI);
+  searchParams.append('code', code);
+  searchParams.append('grant_type', GRANT_TYPE);
+
+  return `${API_URL_TOKEN}${searchParams.toString()}`;
+};
 
 export const setToken = (token) => {
-  localStorage.setItem('Bearer', token);
+  localStorage.setItem('bearer', token);
 };
 
 export const getToken = () => {
-  let token;
-  axios.post(`https://unsplash.com/oauth/token?client_id=${ACCESS_KEY}&client_secret=${SECRET_KEY}&redirect_uri=${REDIRECT_URI}&code=${code}&grant_type=authorization_code`)
-    .then(response => {
-      token = response.data['access_token'];
-      localStorage.setItem('Bearer', token);
-    });
-  setToken(token);
+  // const navigate = useNavigate();
+  let token = localStorage.getItem('bearer') || '';
+  const dispatch = useDispatch();
 
-  if (localStorage.getItem('bearer')) {
-    setToken(localStorage.getItem('bearer'));
+  if (!token) {
+    if (location.search.includes('code')) {
+      const code = new URLSearchParams(location.search).get('code');
+      const urlToken = createTokenUrl(code);
+      axios.post(urlToken)
+        .then(({data}) => {
+          token = data.access_token;
+          setToken(token);
+          dispatch(updateToken(token));
+        })
+        .catch(err => {
+          console.error(err);
+          dispatch(deleteToken());
+        });
+      // token && setToken(token);
+    }
   }
 
   return token;
